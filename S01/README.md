@@ -1,4 +1,4 @@
-IoT Registration for WiFi Access
+# IoT Registration for WiFi Access
 
 The project will deploy a simple web site with back-end database running on a database server. 
 
