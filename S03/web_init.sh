@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt-get update
-sudo apt-get --asume-yes update 
-sudo apt-get --asume-yes install nginx
+sudo apt-get --assume-yes update 
+sudo apt-get --assume-yes install nginx
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo ufw allow 22/tcp
