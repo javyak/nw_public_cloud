@@ -26,7 +26,7 @@ cd /var/www/regportal
 sudo wget https://raw.githubusercontent.com/javyak/nw_public_cloud/master/S03/index.html
 # Complete the Html configuration by appending the 
 cd /var/www/regportal
-sudo bash -c "echo '<img src=\"$1\" alt=\"Regportal.lan\">' >> index.html"
+sudo bash -c "echo '<img src=\"https://$1/image.jpg\" alt=\"Regportal.lan\">' >> index.html"
 sudo bash -c "echo '<p>' >> index.html"
 sudo bash -c "echo Server private IP address: $2 >> index.html"
 sudo bash -c "echo '</p>' >> index.html"
@@ -39,3 +39,4 @@ sudo ln -s /etc/nginx/sites-available/regportal_ssl /etc/nginx/sites-enabled/reg
 sudo systemctl restart nginx
 
 # Last known URL https://s3-eu-west-1.amazonaws.com/iotportal.javyak.local.lan/image.jpg
+
