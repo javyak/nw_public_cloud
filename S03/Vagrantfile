@@ -66,6 +66,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo wget https://raw.githubusercontent.com/javyak/nw_public_cloud/master/S03/web_init.sh
     sudo chmod 774 web_init.sh 
-    sudo ./web_init.sh
+    sudo ./web_init.sh https://performia.hu/wp-content/uploads/2018/08/desperate-businessman.jpg 192.168.33.10
   SHELL
 end
