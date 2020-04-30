@@ -26,12 +26,8 @@ cd /var/www/regportal
 sudo wget https://raw.githubusercontent.com/javyak/nw_public_cloud/master/S03/index.html
 # Complete the Html configuration by appending the 
 cd /var/www/regportal
-sudo bash -c "echo '<img src=\"https://$1/image.jpg\" alt=\"Regportal.lan\">' >> index.html"
-sudo bash -c "echo '<p>' >> index.html"
-sudo bash -c "echo Server private IP address: $2 >> index.html"
-sudo bash -c "echo '</p>' >> index.html"
-sudo bash -c "echo '</body>' >> index.html"
-sudo bash -c "echo '</html>' >> index.html"
+sudo bash -c "sed -i s/S3_BUCKET/$1/ index.html"
+sudo bash -c "sed -i s/PRIVATE_IP_ADDR/$2/ index.html"
 # Configure the web server settings
 cd /etc/nginx/sites-available/
 sudo wget https://raw.githubusercontent.com/javyak/nw_public_cloud/master/S03/regportal_ssl
