@@ -5,10 +5,12 @@ provider "aws" {
 
 resource "aws_vpc" "iot_service" {
   cidr_block = "10.0.0.0/20"
+  enable_dns_hostnames = true
 }
 
 resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.iot_service.id
+  map_public_ip_on_launch = true
   cidr_block = "10.0.0.0/24"
 }
 
@@ -39,6 +41,8 @@ resource "aws_route_table_association" "public" {
 resource "aws_security_group" "allow_access" {
   name = "allow_access"
   description = "Allow admin with SSH and web HTTP and HTTPS"
+  vpc_id = aws_vpc.iot_service.id
+  
   ingress {
     description = "Allow SSH"
     from_port   = 22
@@ -89,8 +93,12 @@ resource "aws_instance" "web_server" {
   ami           = "ami-035966e8adab4aaad"
   instance_type = "t2.micro"
   key_name = aws_key_pair.access.key_name
-  vpc_security_group_ids = ["${aws_security_group.allow_access.name}"]
+  vpc_security_group_ids = [aws_security_group.allow_access.id]
   subnet_id = aws_subnet.public.id
+
+  tags = {
+    Name = "web_server"
+  }
 
   connection {
     type = "ssh"
@@ -112,8 +120,12 @@ resource "aws_instance" "jump_station" {
   ami           = "ami-035966e8adab4aaad"
   instance_type = "t2.micro"
   key_name = aws_key_pair.access.key_name
-  vpc_security_group_ids = ["${aws_security_group.allow_access.name}"]
+  vpc_security_group_ids = [aws_security_group.allow_access.id]
   subnet_id = aws_subnet.public.id
+
+  tags = {
+    Name = "jump_station"
+  }
 
   connection {
     type = "ssh"
@@ -135,22 +147,11 @@ resource "aws_instance" "database_sever" {
   ami           = "ami-035966e8adab4aaad"
   instance_type = "t2.micro"
   key_name = aws_key_pair.access.key_name
-  vpc_security_group_ids = ["${aws_security_group.allow_access.name}"]
+  vpc_security_group_ids = [aws_security_group.allow_access.id]
   subnet_id = aws_subnet.private.id
 
-  connection {
-    type = "ssh"
-    user = "ubuntu"
-    private_key = file("~/.ssh/terraform")
-    host = self.public_ip
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo wget https://raw.githubusercontent.com/javyak/nw_public_cloud/master/S04/database_init.sh",
-      "sudo chmod 774 database_init.sh", 
-      "sudo ./database_init.sh"
-      ]
+  tags = {
+    Name = "database_server"
   }
 }
 
