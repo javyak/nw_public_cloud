@@ -10,7 +10,7 @@ sudo ufw --force enable
 # SSH server confioguration already included in default image.
 
 # Download and install cloudwatch agent
-wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/arm64/latest/amazon-cloudwatch-agent.deb
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
 sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
 # Configure cloudwatch agent with the file in the gir repository
 cd /opt/aws/amazon-cloudwatch-agent/bin 
