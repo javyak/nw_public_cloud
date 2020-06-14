@@ -223,7 +223,7 @@ resource "aws_instance" "jump_station" {
   }
 # Wait until the Cloudwatch agent role is defined before booting up the server and configuring the agent.
   depends_on = [
-    aws_iam_role_policy.cloudwatch_agent,
+    aws_iam_role.cloudwatch_agent,
   ]
 }
 /*
@@ -289,7 +289,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_agent" {
-  role       = aws_iam_role.role.cloudwatch_agent
+  role       = aws_iam_role.cloudwatch_agent.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
