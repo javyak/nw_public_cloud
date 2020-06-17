@@ -7,6 +7,9 @@ sudo apt-get --assume-yes update
 sudo ufw allow 22/tcp
 sudo ufw --force enable
 
+# Apply FW rule to log all oubound SSH traffic
+sudo ufw allow out log to any proto tcp port 22
+
 # SSH server confioguration already included in default image.
 
 # Download and install cloudwatch agent

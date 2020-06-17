@@ -147,8 +147,7 @@ resource "aws_security_group" "database_servers" {
   }
 }
 
-# Storage configuration and file upload
-/*
+
 resource "aws_s3_bucket" "web_bucket" {
   bucket = "iotportal.javyak.local.lan"
   acl = "public-read"
@@ -160,14 +159,14 @@ resource "aws_s3_bucket_object" "web_image" {
   source = "./goku.jpg"
   acl = "public-read"
 }
-*/
+
 # Creation of instances and their key for remote administration.
 
 resource "aws_key_pair" "access" {
   key_name = "accesskey"
   public_key = file("~/.ssh/terraform.pub")
 }
-/*
+
 resource "aws_instance" "web_server" {
   ami           = "ami-035966e8adab4aaad"
   instance_type = "t2.micro"
@@ -195,13 +194,14 @@ resource "aws_instance" "web_server" {
       ]
   }
 }
-*/
+
 resource "aws_instance" "jump_station" {
   ami           = "ami-035966e8adab4aaad"
   instance_type = "t2.micro"
   key_name = aws_key_pair.access.key_name
   vpc_security_group_ids = [aws_security_group.jump_stations.id]
   subnet_id = aws_subnet.public.id
+  iam_instance_profile = aws_iam_instance_profile.cloudwatch_agent.name
 
   tags = {
     Name = "jump_station"
@@ -226,7 +226,7 @@ resource "aws_instance" "jump_station" {
     aws_iam_role.cloudwatch_agent,
   ]
 }
-/*
+
 resource "aws_instance" "database_sever" {
   ami           = "ami-035966e8adab4aaad"
   instance_type = "t2.micro"
@@ -238,7 +238,7 @@ resource "aws_instance" "database_sever" {
     Name = "database_server"
   }
 }
-*/
+
 # IAM configuration. Group operators for read only reusing existing AWS EC2 policy.
 
 resource "aws_iam_group" "operators" {
@@ -267,7 +267,7 @@ resource "aws_iam_group_policy_attachment" "read_only" {
   group      = aws_iam_group.operators.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
 }
-
+*/
 # IAM configuration. Creates the role required for the Cloudwatch agent
 resource "aws_iam_role" "cloudwatch_agent" {
   name = "cloudwatch_agent"
@@ -293,17 +293,22 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_agent" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
+resource "aws_iam_instance_profile" "cloudwatch_agent" {
+  name = "cloudwatch_agent"
+  role = aws_iam_role.cloudwatch_agent.name
+}
+
 # Output values, get with terraform output <name>
 # Use the user secret key to modify AWS credentials and config files
-/*
+
 output "web_fqdn" {
   value = aws_instance.web_server.public_dns
 }
-*/
+
 output "jump_ip" {
   value = aws_instance.jump_station.public_ip
 }
-/*
+
 output "database_ip" {
   value = aws_instance.database_sever.private_ip
 }
@@ -311,7 +316,6 @@ output "database_ip" {
 output "web_server_ip" {
   value = aws_instance.web_server.private_ip
 }
-*/
 
 output "pepito_key_id" {
   value = aws_iam_access_key.pepito_key.id
@@ -326,3 +330,4 @@ output "pepito_secret" {
 # output "pepito_encrypted_secret" {
 #  value = aws_iam_access_key.pepito.encrypted_secret 
 #}
+
