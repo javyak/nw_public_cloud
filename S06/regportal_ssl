@@ -1,8 +1,0 @@
-server {
-    listen 443 ssl;
-    server_name www.regportal.lan;
-    ssl_certificate /etc/ssl/certs/regportal-cert.pem;
-    ssl_certificate_key /etc/ssl/private/regportal.key;
-    root /var/www/regportal;
-    index index.html;
-}
