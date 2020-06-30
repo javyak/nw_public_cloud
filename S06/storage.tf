@@ -8,6 +8,6 @@ resource "aws_s3_bucket" "web_bucket" {
 resource "aws_s3_bucket_object" "web_image" {
   bucket = aws_s3_bucket.web_bucket.bucket
   key = "image.jpg"
-  source = "./goku.jpg"
+  source = "./web_server_files/goku.jpg"
   acl = "public-read"
 }
