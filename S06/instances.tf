@@ -6,7 +6,7 @@ resource "aws_key_pair" "access" {
 }
 
 resource "aws_instance" "web_server1" {
-  ami           = "ami-035966e8adab4aaad"
+  ami           = var.amis[var.region]
   instance_type = "t2.micro"
   key_name = aws_key_pair.access.key_name
   vpc_security_group_ids = [aws_security_group.web_servers.id]
@@ -20,7 +20,7 @@ resource "aws_instance" "web_server1" {
     bastion_host = aws_instance.jump_station.public_ip
     host         = self.private_ip
     type         = "ssh"
-    user         = "ubuntu"
+    user         = var.ami_user
     private_key  = file("~/.ssh/terraform")
   }
 
@@ -34,7 +34,7 @@ resource "aws_instance" "web_server1" {
 }
 
 resource "aws_instance" "web_server2" {
-  ami           = "ami-035966e8adab4aaad"
+  ami           = var.amis[var.region]
   instance_type = "t2.micro"
   key_name = aws_key_pair.access.key_name
   vpc_security_group_ids = [aws_security_group.web_servers.id]
@@ -48,7 +48,7 @@ resource "aws_instance" "web_server2" {
     bastion_host = aws_instance.jump_station.public_ip
     host         = self.private_ip
     type         = "ssh"
-    user         = "ubuntu"
+    user         = var.ami_user
     private_key  = file("~/.ssh/terraform")
   }
 
@@ -62,7 +62,7 @@ resource "aws_instance" "web_server2" {
 }
 
 resource "aws_instance" "jump_station" {
-  ami           = "ami-035966e8adab4aaad"
+  ami           = var.amis[var.region]
   instance_type = "t2.micro"
   key_name = aws_key_pair.access.key_name
   vpc_security_group_ids = [aws_security_group.jump_stations.id]
@@ -75,7 +75,7 @@ resource "aws_instance" "jump_station" {
 
   connection {
     type = "ssh"
-    user = "ubuntu"
+    user = var.ami_user
     private_key = file("~/.ssh/terraform")
     host = self.public_ip
   }
@@ -94,7 +94,7 @@ resource "aws_instance" "jump_station" {
 }
 
 resource "aws_instance" "database_sever" {
-  ami           = "ami-035966e8adab4aaad"
+  ami           = var.amis[var.region]
   instance_type = "t2.micro"
   key_name = aws_key_pair.access.key_name
   vpc_security_group_ids = [aws_security_group.database_servers.id]

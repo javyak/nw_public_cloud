@@ -63,7 +63,7 @@ resource "aws_lb_listener" "iot-web-listener-443" {
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = "arn:aws:acm:eu-west-1:151803822585:certificate/6eaada10-2f24-4f77-8b14-c914678f7b78"
+  certificate_arn   = var.alb_certificate_arn
 # Certificated alreeady created and uploaded to AWS ACM
   default_action {
     type             = "forward"

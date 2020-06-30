@@ -1,3 +1,8 @@
+provider "aws" {
+  version = "~> 2.67"
+  profile = "default"
+  region = var.region
+}
 # Networking configurtion: VPC, subnets, gateways and routing
 
 resource "aws_vpc" "iot_service" {
